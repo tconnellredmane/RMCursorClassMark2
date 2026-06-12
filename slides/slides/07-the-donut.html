@@ -1,0 +1,47 @@
+<div class="slide" id="s7">
+  <h2>The Context Window</h2>
+  <p class="subtitle">Everything Cursor packs into a single request to the model</p>
+
+  <div style="display: flex; align-items: stretch; margin-top: 0.5em; gap: 0;">
+    <div style="flex: 0 0 50%;">
+      <p style="font-weight: 700; color: #0f172a; font-size: 1.15em; margin-bottom: 0.4em;">Anatomy of a Prompt</p>
+      <div style="display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; border: 2px solid #e2e8f0;">
+        <div style="background: #10b981; color: white; padding: 14px 22px; font-weight: 600;">
+          User / Project Rules
+        </div>
+        <div style="background: #ef4444; color: white; padding: 18px 22px; font-weight: 600; line-height: 1.5;">
+          System Instructions<br>
+          Model-specific Directives<br>
+          MCP Tool Schemas
+        </div>
+        <div style="background: #38bdf8; color: #0c4a6e; padding: 28px 22px; font-weight: 600; line-height: 1.5;">
+          Code / File Context<br>
+          Conversation History
+        </div>
+        <div style="background: #10b981; color: white; padding: 14px 22px; font-weight: 600;">
+          User Message
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 0 0 auto; display: flex; flex-direction: column; padding-top: 2.2em;">
+      <div style="flex: 1;"></div>
+      <div style="border-left: 3px solid #dc2626; border-top: 3px solid #dc2626; border-bottom: 3px solid #dc2626; width: 18px; display: flex; align-items: center; flex: 0 0 32%;margin-top:7rem;">
+      </div>
+      <div style="flex: 1;"></div>
+    </div>
+    <div style="flex: 0 0 auto; display: flex; align-items: center; padding-top: 2.2em;">
+      <p style="color: #dc2626; font-weight: 700; font-size: 1.15em; line-height: 1.4;margin-top:7rem;">The Donut<br>Happens Here</p>
+    </div>
+
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+      <img src="images/homer-donut.png" alt="Homer with donut" style="max-height: 40vh; object-fit: contain;">
+    </div>
+  </div>
+
+  <ul style="margin-top: 1.4em;">
+    <li>128K&ndash;1M+ tokens per window</li>
+    <li>Longer chats push content into the <strong>low-attention middle</strong></li>
+    <li>New task = new chat</li>
+  </ul>
+</div>

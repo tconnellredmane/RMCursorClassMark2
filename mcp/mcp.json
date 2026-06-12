@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "mCase": {
+      "command": "npx",
+      "args": [
+        "--registry=http://redmane-npm.eastus.azurecontainer.io:4873",
+        "@redmane/mcase-mcp-server"
+      ],
+      "env": {
+        "MCASE_API_URL": "https://innovation-app-mcs-mcase01.redmane-cloud.us/resource",
+        "MCASE_API_USER": "[provided in class]",
+        "MCASE_API_PASSWORD": "[provided in class]"
+      }
+    }
+  }
+}

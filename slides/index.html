@@ -1,0 +1,141 @@
+<!--
+  index.html — Entry point for the MkIII workshop slide deck.
+  Keyboard nav: Arrow keys, Space, Home/End.
+  Slide counter click opens jump menu.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor for Developers — The Architect's Approach</title>
+<link rel="stylesheet" href="slides.css">
+</head>
+<body>
+
+<div id="slide-container"></div>
+
+<div id="slide-menu" class="hidden">
+  <div id="slide-menu-header">
+    <span>Jump to slide</span>
+    <button id="menu-close" onclick="toggleMenu()">&times;</button>
+  </div>
+  <ul id="slide-menu-list"></ul>
+</div>
+
+<nav>
+  <button id="prev" onclick="go(-1)">&larr; Prev</button>
+  <button id="counter" onclick="toggleMenu()">Loading…</button>
+  <button id="next" onclick="go(1)">Next &rarr;</button>
+</nav>
+
+<script>
+const SLIDE_MANIFEST = [
+  '01-title.html',
+  '02-agenda.html',
+  '03-the-continuum.html',
+  '04-the-five-verbs.html',
+  '05-section-how-cursor-thinks.html',
+  '06-prediction-not-reasoning.html',
+  '07-the-donut.html',
+  '08-plan-code-review.html',
+  '09-section-toolbox.html',
+  '10-plan-mode.html',
+  '11-modes-comparison.html',
+  '12-rules.html',
+  '13-skills.html',
+  '14-decision-framework.html',
+  '15-exercise-rules-workshop.html',
+  '16-skill-anatomy.html',
+  '17-exercise-skills-workshop.html',
+  '18-mcp-what-is-it.html',
+  '19-adrs.html',
+  '20-architect-gates.html',
+  '21-capstone-three-gates.html',
+  '22-token-drains.html',
+  '23-start-fresh.html',
+  '24-debrief-questions.html',
+  '25-continuum-revisit.html',
+  '26-monday-actions.html',
+  '27-closing-quote.html',
+];
+
+let current = 0;
+let total = 0;
+
+async function loadSlides() {
+  const container = document.getElementById('slide-container');
+  const results = await Promise.all(
+    SLIDE_MANIFEST.map(file => fetch(`slides/${file}`).then(r => r.text()))
+  );
+  container.innerHTML = results.join('\n');
+  total = document.querySelectorAll('.slide').length;
+  buildMenu();
+  show(0);
+}
+
+function show(n) {
+  const slides = document.querySelectorAll('.slide');
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  document.getElementById('counter').textContent = `☰ ${n + 1} / ${total}`;
+  document.getElementById('prev').disabled = n === 0;
+  document.getElementById('next').disabled = n === total - 1;
+  highlightMenuItem(n);
+}
+
+function go(dir) {
+  const next = current + dir;
+  if (next >= 0 && next < total) { current = next; show(current); }
+}
+
+function buildMenu() {
+  const slides = document.querySelectorAll('.slide');
+  const list = document.getElementById('slide-menu-list');
+  list.innerHTML = '';
+  slides.forEach((slide, i) => {
+    const heading = slide.querySelector('h1, h2, h3');
+    const title = heading ? heading.textContent.trim() : SLIDE_MANIFEST[i];
+    const li = document.createElement('li');
+    li.dataset.index = i;
+    li.innerHTML = `<span class="menu-num">${i + 1}</span> ${title}`;
+    li.onclick = () => jumpTo(i);
+    list.appendChild(li);
+  });
+}
+
+function highlightMenuItem(n) {
+  const items = document.querySelectorAll('#slide-menu-list li');
+  items.forEach(li => li.classList.remove('active'));
+  if (items[n]) {
+    items[n].classList.add('active');
+    items[n].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function toggleMenu() {
+  const menu = document.getElementById('slide-menu');
+  menu.classList.toggle('hidden');
+  if (!menu.classList.contains('hidden')) highlightMenuItem(current);
+}
+
+function jumpTo(n) {
+  current = n;
+  show(current);
+  document.getElementById('slide-menu').classList.add('hidden');
+}
+
+document.addEventListener('keydown', e => {
+  const menuOpen = !document.getElementById('slide-menu').classList.contains('hidden');
+  if (e.key === 'Escape' && menuOpen) { toggleMenu(); return; }
+  if (menuOpen) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+  if (e.key === 'Home') { current = 0; show(current); }
+  if (e.key === 'End') { current = total - 1; show(current); }
+});
+
+loadSlides();
+</script>
+</body>
+</html>
